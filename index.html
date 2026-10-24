@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rolland — Dev</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- Écran de dévoilement / Loader -->
+    <div id="unveil-screen" class="unveil">
+      <div class="unveil__content">
+        <div class="unveil__brand">ROLLAND<span>-DEV</span></div>
+        <div class="unveil__progress">
+          <span id="unveil-counter">00</span><span>%</span>
+        </div>
+        <div class="unveil__bar">
+          <div id="unveil-fill" class="unveil__fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Superposition pour la séquence d'animation d'entrée du Hero (Isolé en position fixed) -->
+    <div
+      id="hero-intro-overlay"
+      class="hero-intro-overlay"
+      aria-hidden="true"
+    ></div>
+
+    <!-- En-tête du site -->
+    <header id="top">
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="nav__brand" href="#top">Rolland<span>-Dev</span></a>
+        <ul class="nav__list">
+          <li><a class="nav__link" href="#about">À propos</a></li>
+          <li><a class="nav__link" href="#projects">Projets</a></li>
+          <li><a class="nav__link" href="#contact">Contact</a></li>
+        </ul>
+        <div class="lang-selector">
+          <button
+            type="button"
+            class="lang-btn lang-btn--fr lang-btn--active"
+            data-lang="fr"
+          >
+            FR
+          </button>
+          <button type="button" class="lang-btn lang-btn--en" data-lang="en">
+            EN
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main>
+      <section id="hero" class="hero">
+        <h1 class="hero__name" id="hero-title">Rolland<span>-Dev</span></h1>
+        <p class="hero__role hero-fade-item">Développeur front-end</p>
+        <p class="hero__tagline hero-fade-item">
+          Des expériences web claires, rapides et émotionnelles.
+        </p>
+        <div class="hero__cta hero-fade-item">
+          <a class="btn" href="#projects">Voir les projets</a>
+          <a class="btn btn--ghost" href="#contact">Me contacter</a>
+        </div>
+      </section>
+
+      <section id="about" class="section">
+        <h2>À propos</h2>
+        <p>
+          Développeur front-end basé à Paris, je conçois des interfaces web sur
+          mesure. Spécialisé dans la performance et le design éditorial,
+          j’accompagne startups et équipes produit du premier wireframe à la
+          mise en production.
+        </p>
+        <div class="tech-list__mask">
+          <ul class="tech-list">
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+            <li>React</li>
+            <li>Vue</li>
+            <li>TypeScript</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="projects" class="section">
+        <div class="projects__sticky">
+          <div class="reveal-block">
+            <h2>Projets</h2>
+
+            <div class="projects-grid">
+              <article class="project-card" data-project="1">
+                <div class="project-card__img" style="background: red"></div>
+                <h3>Atlas — Plateforme e-commerce</h3>
+                <p>
+                  Boutique headless : catalogue, paiement et back-office
+                  unifiés.
+                </p>
+                <a class="project-card__link" href="#">Voir le cas</a>
+              </article>
+              <article class="project-card" data-project="2">
+                <div class="project-card__img" style="background: green"></div>
+                <h3>Pulse — Tableau de bord temps réel</h3>
+                <p>Suivi d’indicateurs live pour une équipe ops.</p>
+                <a class="project-card__link" href="#">Voir le cas</a>
+              </article>
+              <article class="project-card" data-project="3">
+                <div class="project-card__img" style="background: blue"></div>
+                <h3>Flux — Application collaborative</h3>
+                <p>
+                  Gestion de projet collaborative pour une équipe distribuée.
+                </p>
+                <a class="project-card__link" href="#">Voir le cas</a>
+              </article>
+              <article class="project-card" data-project="4">
+                <div class="project-card__img" style="background: violet"></div>
+                <h3>Nebula — Plateforme de streaming</h3>
+                <p>Diffusion vidéo haute définition avec recommandation IA.</p>
+                <a class="project-card__link" href="#">Voir le cas</a>
+              </article>
+              <article class="project-card" data-project="5">
+                <div class="project-card__img" style="background: orange"></div>
+                <h3>Orbit — Outil de productivité</h3>
+                <p>Organisation de tâches et collaboration en équipe simplifiée.</p>
+                <a class="project-card__link" href="#">Voir le cas</a>
+              </article>
+              <article class="project-card" data-project="6">
+                <div class="project-card__img" style="background: teal"></div>
+                <h3>Zen — Application bien-être</h3>
+                <p>Méditation guidée et suivi du sommeil personnalisé.</p>
+                <a class="project-card__link" href="#">Voir le cas</a>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <dialog id="project-dialog" class="project-dialog">
+          <button
+            class="project-dialog__close"
+            aria-label="Fermer la fiche projet"
+          >
+            ×
+          </button>
+          <div class="project-dialog__content">
+            <h3 id="dialog-title">Titre du projet</h3>
+            <p id="dialog-desc">Description détaillée...</p>
+            <a
+              id="dialog-link"
+              class="btn"
+              href="#"
+              target="_blank"
+              rel="noopener"
+              >Voir le cas</a
+            >
+          </div>
+        </dialog>
+      </section>
+
+      <section id="contact" class="section">
+        <h2>Contact</h2>
+        <ul class="contact-list">
+          <li>
+            <a href="https://github.com/roland-dev" class="contact-link">
+              <span>GitHub</span>
+              <span class="contact-link__arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:bonjour@roland.dev" class="contact-link">
+              <span>E-mail</span>
+              <span class="contact-link__arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.linkedin.com/in/roland-dev"
+              class="contact-link"
+            >
+              <span>LinkedIn</span>
+              <span class="contact-link__arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>Rolland — Dev</p>
+      <p id="footer-year" class="footer__year"></p>
+    </footer>
+
+    <script src="/src/main.js"></script>
+  </body>
+</html>

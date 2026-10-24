@@ -1,0 +1,636 @@
+:root {
+  --c-bg: #fafaf7;
+  --c-ink: #111310;
+  --c-accent: #ff4d00;
+  --c-accent-text: #c43500;
+  --c-surface: #ffffff;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+  --space-12: 4rem;
+  --space-16: 6rem;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: 2rem;
+  --fs-3xl: 3rem;
+  --fs-4xl: 4.5rem;
+  --fs-display: 5.5rem;
+
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", monospace;
+
+  --projects-pin: 60vh;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--c-bg);
+  color: var(--c-ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Verrouillage du scroll X et Y pendant l'animation de chargement + intro hero */
+html.is-animating,
+body.is-animating {
+  overflow: hidden !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Écran de Dévoilement (Loader Reveal)
+───────────────────────────────────────────────────────────── */
+.unveil {
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  background-color: #0d0e0d;
+  color: #fafaf7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  will-change: transform, opacity;
+  transition:
+    transform 1s cubic-bezier(0.76, 0, 0.24, 1),
+    opacity 0.8s ease;
+}
+
+.unveil__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  z-index: 2;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.unveil__brand {
+  font-size: var(--fs-xl);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.unveil__brand span {
+  color: var(--c-accent-text);
+}
+
+.unveil__progress {
+  font-size: var(--fs-4xl);
+  font-weight: 800;
+  font-family: var(--font-mono);
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.unveil__bar {
+  width: 180px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.unveil__fill {
+  width: 0%;
+  height: 100%;
+  background: var(--c-accent);
+  transition: width 0.1s linear;
+}
+
+/* Transitions de fermeture de l'écran initial du loader */
+.unveil.is-leaving .unveil__content {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.unveil.is-opened {
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(1.08);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Overlay pour l'Animation Introductive du Hero (Plein écran Fixe)
+───────────────────────────────────────────────────────────── */
+/* Overlay strict aux dimensions du viewport utilisateur */
+.hero-intro-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  background-color: var(--c-bg);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Empêche tout débordement en dehors de l'écran */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.hero-intro-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Cartes parfaitement centrées avec transform (évite les marges négatives cassées) */
+.hero-intro-overlay__img {
+  position: absolute;
+  width: 220px;
+  height: 140px;
+  background-color: #e7e5de;
+  background-image: radial-gradient(
+    circle at 25% 25%,
+    rgba(255, 77, 0, 0.25) 0%,
+    transparent 50%
+  );
+  border: 1px solid rgba(17, 19, 16, 0.15);
+  border-radius: var(--space-2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.2); /* Centre proprement et initialise l'échelle */
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Titre h1 géant centré de la même manière */
+.hero-intro-overlay__title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.2);
+  transform-origin: 50% 50%;
+  font-size: clamp(2.5rem, 8vw, var(--fs-display));
+  font-weight: 800;
+  color: var(--c-ink);
+  text-align: center;
+  opacity: 0;
+  will-change: transform, opacity;
+  white-space: nowrap;
+  /* Contrasté sur le fond clair de l'overlay */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.hero-intro-overlay__title span {
+  color: var(--c-accent-text);
+}
+/* ─────────────────────────────────────────────────────────────
+   Transitions du Contenu Principal & Hero
+───────────────────────────────────────────────────────────── */
+main,
+header#top {
+  transition:
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.8s ease;
+}
+
+body:not(.is-loaded) main,
+body:not(.is-loaded) header#top {
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+}
+
+body.is-loaded main,
+body.is-loaded header#top {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* État initial du Hero avant l'apparition */
+.hero-fade-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-fade-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero__name {
+  will-change: transform, opacity;
+}
+
+.hero__name.is-hidden-initial {
+  opacity: 0;
+}
+
+/* Animation finale de dézoom / chute avec rebond pour le h1 */
+.hero__name.animate-drop-dezoom {
+  animation: heroTitleDezoomDrop 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.2)
+    forwards;
+}
+
+@keyframes heroTitleDezoomDrop {
+  0% {
+    opacity: 0;
+    transform: scale(3);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Layout & Navigation
+───────────────────────────────────────────────────────────── */
+header#top {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  background-color: rgba(250, 250, 247, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(17, 19, 16, 0.08);
+  padding: var(--space-4) var(--space-6);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav__brand {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav__brand span {
+  color: var(--c-accent-text);
+}
+
+.nav__list {
+  display: flex;
+  gap: var(--space-5);
+  list-style: none;
+}
+
+.nav__link {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+  transition: 0.7s ease;
+}
+.nav__link:hover {
+  color: var(--c-accent-text);
+}
+
+.lang-selector {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.lang-btn {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  background: var(--c-surface);
+  border: 1px solid rgba(17, 19, 16, 0.15);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--space-1);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.lang-btn--active {
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: var(--c-ink);
+}
+
+.lang-btn:not(.lang-btn--active) {
+  background: var(--c-surface);
+  color: var(--c-ink);
+}
+
+main {
+  padding-top: 120px;
+}
+
+main h1 span {
+  color: var(--c-accent-text);
+}
+.section {
+  padding: var(--space-16) var(--space-4);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section h2 {
+  font-size: var(--fs-3xl);
+  margin-bottom: var(--space-8);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Hero
+───────────────────────────────────────────────────────────── */
+.hero {
+  min-height: 80vh;
+  padding: var(--space-16) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 1100px;
+  min-height: 100dvh;
+  margin: 0 auto;
+}
+
+.hero__name {
+  font-size: clamp(3rem, 10vw, var(--fs-display));
+  line-height: 1.05;
+  margin-bottom: var(--space-4);
+}
+
+.hero__role {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: var(--space-2);
+}
+
+.hero__tagline {
+  font-size: var(--fs-lg);
+  max-width: 48ch;
+  margin-bottom: var(--space-8);
+  opacity: 0.8;
+}
+
+.hero__cta {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-3) var(--space-6);
+  background: var(--c-accent);
+  color: var(--c-ink);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--space-1);
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+.btn--ghost {
+  background: transparent;
+  border: 1px solid var(--c-ink);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Projets : apparition en fondu au scroll
+───────────────────────────────────────────────────────────── */
+#projects {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-4) var(--space-16);
+}
+
+.projects__sticky {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 90px;
+}
+
+.reveal-block {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+.reveal-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.projects__sticky h2 {
+  font-size: var(--fs-3xl);
+  margin-bottom: var(--space-8);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-8);
+}
+
+.project-card {
+  background: var(--c-surface);
+  border-radius: var(--space-2);
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+.project-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.12);
+}
+
+.project-card__img {
+  width: 100%;
+  height: 200px;
+  background-color: #e7e5de;
+  background-image: radial-gradient(
+    circle at 25% 25%,
+    rgba(255, 77, 0, 0.15) 0%,
+    transparent 40%
+  );
+}
+
+.project-card h3 {
+  margin: var(--space-4);
+  font-size: var(--fs-xl);
+}
+.project-card p {
+  margin: 0 var(--space-4) var(--space-4);
+  opacity: 0.8;
+  font-size: var(--fs-sm);
+}
+.project-card__link {
+  display: inline-block;
+  margin: 0 var(--space-4) var(--space-6);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--c-accent-text);
+  text-decoration: none;
+}
+
+@media (max-width: 700px) {
+  #projects {
+    height: auto;
+  }
+  .projects__sticky {
+    position: static;
+    height: auto;
+    padding-top: 0;
+    overflow: visible;
+  }
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.project-dialog {
+  padding: 0;
+  border: none;
+  border-radius: var(--space-3);
+  max-width: 560px;
+  width: 90vw;
+  background: var(--c-surface);
+  margin: auto;
+}
+.project-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+.project-dialog__close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: var(--c-surface);
+  cursor: pointer;
+}
+.project-dialog__content {
+  padding: var(--space-8);
+}
+.project-dialog__content h3 {
+  font-size: var(--fs-2xl);
+  margin-bottom: var(--space-3);
+}
+.project-dialog__content p {
+  font-size: var(--fs-base);
+  margin-bottom: var(--space-6);
+  opacity: 0.85;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Contact & Footer
+───────────────────────────────────────────────────────────── */
+.contact-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+.contact-link:hover {
+  color: var(--c-accent-text);
+  transform: translateX(var(--space-2));
+}
+
+.tech-list {
+  display: flex;
+  gap: var(--space-3);
+  list-style: none;
+  margin-top: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.tech-list li {
+  padding: var(--space-2) var(--space-4);
+  background: var(--c-surface);
+  border: 1px solid rgba(17, 19, 16, 0.1);
+  border-radius: var(--space-1);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+}
+
+footer {
+  padding: var(--space-12) var(--space-4);
+  border-top: 1px solid rgba(17, 19, 16, 0.08);
+  margin-top: var(--space-16);
+  text-align: center;
+}
+
+.footer__year {
+  margin-top: var(--space-2);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  opacity: 0.6;
+}
