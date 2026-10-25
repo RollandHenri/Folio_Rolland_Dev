@@ -124,6 +124,21 @@ export function initIntro({ onDone } = {}) {
   };
 
   try {
+    // Accessibilité : si l'utilisateur préfère réduire les animations, on
+    // saute entièrement loader et intro — contenu visible immédiatement,
+    // sans aucune animation ni délai, et sans jamais verrouiller le scroll.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const unveilScreen = document.getElementById("unveil-screen");
+      const heroIntroOverlay = document.getElementById("hero-intro-overlay");
+      if (unveilScreen) unveilScreen.remove();
+      if (heroIntroOverlay) heroIntroOverlay.remove();
+      document.body.classList.add("is-loaded");
+      safeSet(ANIMATIONS_DONE_KEY, "1");
+      releaseScrollLock();
+      notifyDone();
+      return;
+    }
+
     const animationsAlreadyDone = safeGet(ANIMATIONS_DONE_KEY) === "1";
 
     if (animationsAlreadyDone) {
