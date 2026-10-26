@@ -1,9 +1,13 @@
 import { projectsData } from "../data/projects.js";
+import { getLang } from "./lang.js";
 
 // =========================================================================
 // PANNEAU DÉTAILS PROJET (même page, fondu gauche → droite)
 // Regroupe tout ce qui concerne le panneau : openDetails/closeDetails,
-// carousel, clic sur carte, tilt 3D au survol et touche Escape.
+// carousel, clic sur le lien de la carte, tilt 3D au survol et touche
+// Escape. Les textes sont bilingues (projectsData { fr, en }) : la langue
+// courante vient de getLang() et le panneau ouvert se re-remplit à chaque
+// changement de langue (événement "folio:langchange").
 // =========================================================================
 export function initDetails() {
   const detailsPanel = document.getElementById("project-details");
@@ -29,6 +33,7 @@ export function initDetails() {
   function updateCarousel(index) {
     if (!carouselTrack || !currentProjectId) return;
     const data = projectsData[currentProjectId];
+    const lang = getLang();
     carouselPrev.disabled = index === 0;
     carouselNext.disabled = index >= data.colors.length - 1;
 
@@ -38,7 +43,7 @@ export function initDetails() {
     });
 
     detailsMainImg.style.backgroundColor = data.colors[index];
-    detailsCaption.textContent = data.captions?.[index] ?? data.caption;
+    detailsCaption.textContent = data.captions[lang][index] ?? data.caption[lang];
 
     const activeItem = items[index];
     if (!activeItem) return;
@@ -49,19 +54,20 @@ export function initDetails() {
     });
   }
 
-  function openDetails(id) {
+  // Remplissage du panneau (titre, description, lien, tags, légende) pour
+  // le projet id, dans la langue courante. Appelé à l'ouverture ET à chaque
+  // changement de langue tant que le panneau reste ouvert.
+  function fillDetails(id) {
     const data = projectsData[id];
-    if (!data || !detailsPanel) return;
+    if (!data) return;
+    const lang = getLang();
 
-    currentProjectId = id;
-    carouselIndex = 0;
-
-    detailsTitle.textContent = data.title;
-    detailsDesc.textContent = data.desc;
+    detailsTitle.textContent = data.title[lang];
+    detailsDesc.textContent = data.desc[lang];
     detailsLink.href = data.link;
 
     // Rendu sécurisé : nœuds créés via createElement + textContent
-    // (aucune écriture HTML directe) pour les tags et les vignettes.
+    // (aucune écriture HTML directe) pour les tags.
     detailsTags.replaceChildren(
       ...data.tech.map((t) => {
         const s = document.createElement("span");
@@ -70,6 +76,18 @@ export function initDetails() {
       })
     );
 
+    updateCarousel(carouselIndex);
+  }
+
+  function openDetails(id) {
+    const data = projectsData[id];
+    if (!data || !detailsPanel) return;
+
+    currentProjectId = id;
+    carouselIndex = 0;
+
+    // Rendu sécurisé : nœuds créés via createElement + style
+    // (aucune écriture HTML directe) pour les vignettes du carrousel.
     carouselTrack.replaceChildren(
       ...data.colors.map((color, i) => {
         const item = document.createElement("div");
@@ -79,7 +97,7 @@ export function initDetails() {
         return item;
       })
     );
-    updateCarousel(carouselIndex);
+    fillDetails(id);
 
     // Capture du focus AVANT de masquer main : masquer l'ancêtre du
     // lien déclencheur réinitialise activeElement sur <body>.
@@ -96,10 +114,14 @@ export function initDetails() {
 
     detailsBack.focus();
 
+    const lang = getLang();
     const announce = document.createElement("div");
     announce.setAttribute("aria-live", "polite");
     announce.className = "sr-only";
-    announce.textContent = `Détails du projet : ${data.title}`;
+    announce.textContent =
+      lang === "en"
+        ? `Project details: ${data.title[lang]}`
+        : `Détails du projet : ${data.title[lang]}`;
     detailsPanel.appendChild(announce);
     setTimeout(() => announce.remove(), 1000);
   }
@@ -122,6 +144,14 @@ export function initDetails() {
 
     currentProjectId = null;
   }
+
+  // Changement de langue (boutons FR/EN) pendant que le panneau est ouvert :
+  // on relance le remplissage pour que titre, description, lien et légende
+  // suivent la nouvelle langue (les couleurs/vignettes ne changent pas).
+  window.addEventListener("folio:langchange", () => {
+    if (!currentProjectId || !detailsPanel || detailsPanel.hidden) return;
+    fillDetails(currentProjectId);
+  });
 
   // Ouverture du panneau : le déclencheur est le lien "Voir le cas"
   // (focusable au clavier) ; l'article ne porte plus que le tilt 3D.

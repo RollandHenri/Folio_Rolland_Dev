@@ -35,9 +35,9 @@
       <nav class="nav" aria-label="Navigation principale">
         <a class="nav__brand" href="#top">Rolland<span>-Dev</span></a>
         <ul class="nav__list" id="nav-list">
-          <li><a class="nav__link" href="#about">À propos</a></li>
-          <li><a class="nav__link" href="#projects">Projets</a></li>
-          <li><a class="nav__link" href="#contact">Contact</a></li>
+          <li><a class="nav__link" href="#about" data-i18n="nav.about">À propos</a></li>
+          <li><a class="nav__link" href="#projects" data-i18n="nav.projects">Projets</a></li>
+          <li><a class="nav__link" href="#contact" data-i18n="nav.contact">Contact</a></li>
         </ul>
         <div class="lang-selector">
           <button
@@ -57,6 +57,7 @@
           aria-expanded="false"
           aria-controls="nav-list"
           aria-label="Menu"
+          data-i18n-aria="nav.menu"
         >
           <span class="nav__toggle-bar"></span>
           <span class="nav__toggle-bar"></span>
@@ -69,19 +70,19 @@
     <main>
       <section id="hero" class="hero">
         <h1 class="hero__name" id="hero-title">Rolland<span>-Dev</span></h1>
-        <p class="hero__role hero-fade-item">Développeur front-end</p>
-        <p class="hero__tagline hero-fade-item">
+        <p class="hero__role hero-fade-item" data-i18n="hero.role">Développeur front-end</p>
+        <p class="hero__tagline hero-fade-item" data-i18n="hero.tagline">
           Des expériences web claires, rapides et émotionnelles.
         </p>
         <div class="hero__cta hero-fade-item">
-          <a class="btn" href="#projects">Voir les projets</a>
-          <a class="btn btn--ghost" href="#contact">Me contacter</a>
+          <a class="btn" href="#projects" data-i18n="hero.cta.projects">Voir les projets</a>
+          <a class="btn btn--ghost" href="#contact" data-i18n="hero.cta.contact">Me contacter</a>
         </div>
       </section>
 
       <section id="about" class="section">
-        <h2>À propos</h2>
-        <p>
+        <h2 data-i18n="about.title">À propos</h2>
+        <p data-i18n="about.text">
           Développeur front-end basé à Saint Nazaire, je conçois des interfaces
           web sur mesure. Spécialisé dans la performance et le design éditorial,
           j’accompagne startups et équipes produit du premier wireframe à la
@@ -102,51 +103,51 @@
       <section id="projects" class="section">
         <div class="projects__sticky">
           <div class="reveal-block">
-            <h2>Projets</h2>
+            <h2 data-i18n="projects.title">Projets</h2>
 
             <div class="projects-grid">
               <article class="project-card" data-project="1">
                 <div class="project-card__img" style="background: red"></div>
-                <h3>Atlas — Plateforme e-commerce</h3>
-                <p>
+                <h3 data-i18n="projects.1.title">Atlas — Plateforme e-commerce</h3>
+                <p data-i18n="projects.1.desc">
                   Boutique headless : catalogue, paiement et back-office
                   unifiés.
                 </p>
-                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="1">Voir le cas</a>
+                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="1" data-i18n="projects.1.link">Voir le cas</a>
               </article>
               <article class="project-card" data-project="2">
                 <div class="project-card__img" style="background: green"></div>
-                <h3>Pulse — Tableau de bord temps réel</h3>
-                <p>Suivi d’indicateurs live pour une équipe ops.</p>
-                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="2">Voir le cas</a>
+                <h3 data-i18n="projects.2.title">Pulse — Tableau de bord temps réel</h3>
+                <p data-i18n="projects.2.desc">Suivi d’indicateurs live pour une équipe ops.</p>
+                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="2" data-i18n="projects.2.link">Voir le cas</a>
               </article>
               <article class="project-card" data-project="3">
                 <div class="project-card__img" style="background: blue"></div>
-                <h3>Flux — Application collaborative</h3>
-                <p>
+                <h3 data-i18n="projects.3.title">Flux — Application collaborative</h3>
+                <p data-i18n="projects.3.desc">
                   Gestion de projet collaborative pour une équipe distribuée.
                 </p>
-                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="3">Voir le cas</a>
+                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="3" data-i18n="projects.3.link">Voir le cas</a>
               </article>
               <article class="project-card" data-project="4">
                 <div class="project-card__img" style="background: violet"></div>
-                <h3>Nebula — Plateforme de streaming</h3>
-                <p>Diffusion vidéo haute définition avec recommandation IA.</p>
-                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="4">Voir le cas</a>
+                <h3 data-i18n="projects.4.title">Nebula — Plateforme de streaming</h3>
+                <p data-i18n="projects.4.desc">Diffusion vidéo haute définition avec recommandation IA.</p>
+                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="4" data-i18n="projects.4.link">Voir le cas</a>
               </article>
               <article class="project-card" data-project="5">
                 <div class="project-card__img" style="background: orange"></div>
-                <h3>Orbit — Outil de productivité</h3>
-                <p>
+                <h3 data-i18n="projects.5.title">Orbit — Outil de productivité</h3>
+                <p data-i18n="projects.5.desc">
                   Organisation de tâches et collaboration en équipe simplifiée.
                 </p>
-                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="5">Voir le cas</a>
+                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="5" data-i18n="projects.5.link">Voir le cas</a>
               </article>
               <article class="project-card" data-project="6">
                 <div class="project-card__img" style="background: teal"></div>
-                <h3>Zen — Application bien-être</h3>
-                <p>Méditation guidée et suivi du sommeil personnalisé.</p>
-                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="6">Voir le cas</a>
+                <h3 data-i18n="projects.6.title">Zen — Application bien-être</h3>
+                <p data-i18n="projects.6.desc">Méditation guidée et suivi du sommeil personnalisé.</p>
+                <a class="project-card__link" href="#project-details" aria-haspopup="dialog" data-project="6" data-i18n="projects.6.link">Voir le cas</a>
               </article>
             </div>
           </div>
@@ -155,7 +156,7 @@
       </section>
 
       <section id="contact" class="section">
-        <h2>Contact</h2>
+        <h2 data-i18n="contact.title">Contact</h2>
         <ul class="contact-list">
           <li>
             <a href="https://github.com/roland-dev" class="contact-link">
@@ -183,24 +184,24 @@
     </main>
 
     <section id="project-details" class="project-details-panel" aria-modal="true" role="dialog" aria-labelledby="details-title" hidden>
-      <button class="project-details__back" aria-label="Retour aux projets">Retour aux projets</button>
+      <button class="project-details__back" aria-label="Retour aux projets" data-i18n-aria="details.back" data-i18n="details.back">Retour aux projets</button>
 
       <div class="project-details__wrapper">
         <div class="project-details__media">
           <div id="details-main-img" class="project-details__main-img"></div>
           <div class="project-details__carousel">
-            <button class="carousel__btn carousel__btn--prev" aria-label="Image précédente">‹</button>
+            <button class="carousel__btn carousel__btn--prev" aria-label="Image précédente" data-i18n-aria="details.prev">‹</button>
             <div class="carousel__track" id="carousel-track"></div>
-            <button class="carousel__btn carousel__btn--next" aria-label="Image suivante">›</button>
+            <button class="carousel__btn carousel__btn--next" aria-label="Image suivante" data-i18n-aria="details.next">›</button>
           </div>
           <p class="project-details__caption" id="details-caption"></p>
         </div>
 
         <div class="project-details__content">
-          <h3 id="details-title">Titre du projet</h3>
+          <h3 id="details-title" data-i18n="details.titleFallback">Titre du projet</h3>
           <div class="project-details__tags" id="details-tags"></div>
-          <p id="details-desc">Résumé du projet...</p>
-          <a id="details-link" class="btn" href="#" target="_blank" rel="noopener">Voir le site</a>
+          <p id="details-desc" data-i18n="details.descFallback">Résumé du projet...</p>
+          <a id="details-link" class="btn" href="#" target="_blank" rel="noopener" data-i18n="details.visit">Voir le site</a>
         </div>
       </div>
     </section>
