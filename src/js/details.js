@@ -178,9 +178,13 @@ export function initDetails() {
     // getBoundingClientRect dans la boucle de déplacement, et les
     // écritures des variables CSS sont groupées dans un rAF
     // (une frame au maximum, la dernière position du curseur gagne).
+    // Si la page défile pendant le survol (listener "scroll" ci-dessous),
+    // le rect est re-mesuré : une lecture par frame de scroll au maximum,
+    // jamais dans mousemove.
     let rect = null;
     let rafId = null;
     let lastMove = null;
+    let scrollRafId = null;
 
     const tiltDisabled = () =>
       coarsePointer.matches || reducedMotion.matches;
@@ -222,6 +226,28 @@ export function initDetails() {
       card.style.setProperty("--rotate-x", "0deg");
       card.style.setProperty("--rotate-y", "0deg");
     });
+
+    // Rect périmé en cours de survol : si la page défile alors que le
+    // curseur reste immobile sur la carte, pointerenter/leave ne sont
+    // pas redéclenchés et le rect en cache ne correspond plus à
+    // l'écran (l'inclinaison dérive de ~10° par demi-hauteur de scroll,
+    // sans clamp ni correction de sens). On RE-MESURE plutôt qu'on
+    // n'invalide : un pointeur immobile ne redéclenche pas fiablement
+    // pointerenter, donc l'inclinaison resterait figée. Même throttle
+    // que le reste du fichier (une frame rAF en attente max), listener
+    // passif, et aucun travail hors survol actif (rect non null).
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (rect === null || scrollRafId !== null) return;
+        scrollRafId = requestAnimationFrame(() => {
+          scrollRafId = null;
+          if (rect === null) return; // survol terminé avant la frame
+          rect = card.getBoundingClientRect();
+        });
+      },
+      { passive: true }
+    );
   });
 
   if (detailsBack) {
