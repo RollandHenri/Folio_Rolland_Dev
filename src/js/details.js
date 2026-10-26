@@ -58,6 +58,10 @@ export function initDetails() {
       .join("");
     updateCarouselButtons();
 
+    // Capture du focus AVANT de masquer main : masquer l'ancêtre du
+    // lien déclencheur réinitialise activeElement sur <body>.
+    lastFocused = document.activeElement;
+
     // Vraie modale : le contenu principal quitte l'arbre (plus
     // focusable ni lisible) et le scroll du body est verrouillé
     // (voir body.details-open dans style.css).
@@ -67,7 +71,6 @@ export function initDetails() {
     detailsPanel.setAttribute("aria-hidden", "false");
     detailsPanel.hidden = false;
 
-    lastFocused = document.activeElement;
     detailsBack.focus();
 
     const announce = document.createElement("div");
