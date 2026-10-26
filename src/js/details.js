@@ -23,15 +23,29 @@ export function initDetails() {
   let carouselIndex = 0;
   let lastFocused = null;
 
-  function updateCarouselButtons() {
+  // SEULE source de vérité de l'affichage du carrousel : état des
+  // boutons, vignette active, image principale, légende et défilement
+  // horizontal de la vignette active (respecte prefers-reduced-motion).
+  function updateCarousel(index) {
     if (!carouselTrack || !currentProjectId) return;
     const data = projectsData[currentProjectId];
-    carouselPrev.disabled = carouselIndex === 0;
-    carouselNext.disabled = carouselIndex >= data.colors.length - 1;
+    carouselPrev.disabled = index === 0;
+    carouselNext.disabled = index >= data.colors.length - 1;
 
     const items = carouselTrack.querySelectorAll(".carousel__item");
     items.forEach((item, i) => {
-      item.classList.toggle("active", i === carouselIndex);
+      item.classList.toggle("active", i === index);
+    });
+
+    detailsMainImg.style.backgroundColor = data.colors[index];
+    detailsCaption.textContent = data.captions?.[index] ?? data.caption;
+
+    const activeItem = items[index];
+    if (!activeItem) return;
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    carouselTrack.scrollTo({
+      left: activeItem.offsetLeft - carouselTrack.offsetLeft,
+      behavior: prefersReduced ? "auto" : "smooth"
     });
   }
 
@@ -45,18 +59,27 @@ export function initDetails() {
     detailsTitle.textContent = data.title;
     detailsDesc.textContent = data.desc;
     detailsLink.href = data.link;
-    detailsMainImg.style.backgroundColor = data.color;
-    detailsCaption.textContent = data.caption;
 
-    detailsTags.innerHTML = data.tech.map((t) => `<span>${t}</span>`).join("");
+    // Rendu sécurisé : nœuds créés via createElement + textContent
+    // (aucune écriture HTML directe) pour les tags et les vignettes.
+    detailsTags.replaceChildren(
+      ...data.tech.map((t) => {
+        const s = document.createElement("span");
+        s.textContent = t;
+        return s;
+      })
+    );
 
-    carouselTrack.innerHTML = data.colors
-      .map(
-        (color, i) =>
-          `<div class="carousel__item${i === 0 ? ' active' : ''}" style="background-color: ${color};"></div>`
-      )
-      .join("");
-    updateCarouselButtons();
+    carouselTrack.replaceChildren(
+      ...data.colors.map((color, i) => {
+        const item = document.createElement("div");
+        item.className = "carousel__item";
+        if (i === 0) item.classList.add("active");
+        item.style.backgroundColor = color;
+        return item;
+      })
+    );
+    updateCarousel(carouselIndex);
 
     // Capture du focus AVANT de masquer main : masquer l'ancêtre du
     // lien déclencheur réinitialise activeElement sur <body>.
@@ -151,6 +174,21 @@ export function initDetails() {
       return;
     }
 
+    // Flèches ←/→ : navigation du carrousel (uniquement panneau ouvert,
+    // donc un projet est actif). Même logique de bornage que les boutons.
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      const data = projectsData[currentProjectId];
+      if (!data) return;
+      e.preventDefault();
+      const max = data.colors.length - 1;
+      carouselIndex =
+        e.key === "ArrowLeft"
+          ? Math.max(0, carouselIndex - 1)
+          : Math.min(max, carouselIndex + 1);
+      updateCarousel(carouselIndex);
+      return;
+    }
+
     if (e.key !== "Tab") return;
 
     // Piège de focus : tant que le panneau est ouvert (role="dialog"
@@ -182,13 +220,13 @@ export function initDetails() {
   carouselPrev?.addEventListener("click", () => {
     if (!currentProjectId) return;
     carouselIndex = Math.max(0, carouselIndex - 1);
-    updateCarouselButtons();
+    updateCarousel(carouselIndex);
   });
 
   carouselNext?.addEventListener("click", () => {
     if (!currentProjectId) return;
     const data = projectsData[currentProjectId];
     carouselIndex = Math.min(data.colors.length - 1, carouselIndex + 1);
-    updateCarouselButtons();
+    updateCarousel(carouselIndex);
   });
 }

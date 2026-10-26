@@ -9,6 +9,7 @@ export const projectsData = {
     link: "https://example.com/atlas",
     color: "#ff4d00",
     colors: ["#ff4d00", "#c43500", "#ff6b35"],
+    captions: ["Aperçu de la boutique headless Atlas", "Catalogue et filtres de recherche", "Tunnel de paiement sécurisé"],
     caption: "Aperçu de la boutique headless Atlas"
   },
   2: {
@@ -18,6 +19,7 @@ export const projectsData = {
     link: "https://example.com/pulse",
     color: "#10b981",
     colors: ["#10b981", "#059669", "#34d399"],
+    captions: ["Tableau de bord Pulse en temps réel", "Graphiques analytiques en direct", "Vue des alertes ops"],
     caption: "Tableau de bord Pulse en temps réel"
   },
   3: {
@@ -27,6 +29,7 @@ export const projectsData = {
     link: "https://example.com/flux",
     color: "#3b82f6",
     colors: ["#3b82f6", "#2563eb", "#60a5fa"],
+    captions: ["Interface collaborative Flux", "Édition en temps réel", "Vue équipe distribuée"],
     caption: "Interface collaborative Flux"
   },
   4: {
@@ -36,6 +39,7 @@ export const projectsData = {
     link: "https://example.com/nebula",
     color: "#a855f7",
     colors: ["#a855f7", "#9333ea", "#c084fc"],
+    captions: ["Lecteur vidéo Nebula", "Catalogue et recommandations", "Lecture haute définition"],
     caption: "Lecteur vidéo Nebula"
   },
   5: {
@@ -45,6 +49,7 @@ export const projectsData = {
     link: "https://example.com/orbit",
     color: "#f59e0b",
     colors: ["#f59e0b", "#d97706", "#fbbf24"],
+    captions: ["Tableau de bord Orbit", "Gestion des tâches", "Vue collaboration d'équipe"],
     caption: "Tableau de bord Orbit"
   },
   6: {
@@ -54,6 +59,7 @@ export const projectsData = {
     link: "https://example.com/zen",
     color: "#14b8a6",
     colors: ["#14b8a6", "#0d9488", "#5eead4"],
+    captions: ["Interface Zen bien-être", "Sessions de méditation guidée", "Suivi du sommeil"],
     caption: "Interface Zen bien-être"
   }
 };
