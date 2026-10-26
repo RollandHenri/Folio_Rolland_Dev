@@ -2,7 +2,7 @@
 // DONNÉES DES PROJETS (consommées par le panneau détails — src/js/details.js)
 // Champs bilingues : title / desc / caption / captions sont des objets
 // { fr, en } ; captions est un objet { fr, en } de tableaux alignés 1:1
-// sur colors. tech / link / color / colors sont langues-indépendants.
+// sur colors. tech / link / colors sont langues-indépendants.
 // =========================================================================
 export const projectsData = {
   1: {
@@ -13,7 +13,6 @@ export const projectsData = {
     },
     tech: ["React", "Node.js", "Stripe", "PostgreSQL"],
     link: "https://example.com/atlas",
-    color: "#ff4d00",
     colors: ["#ff4d00", "#c43500", "#ff6b35"],
     captions: {
       fr: ["Aperçu de la boutique headless Atlas", "Catalogue et filtres de recherche", "Tunnel de paiement sécurisé"],
@@ -29,7 +28,6 @@ export const projectsData = {
     },
     tech: ["Vue", "D3.js", "WebSocket", "Redis"],
     link: "https://example.com/pulse",
-    color: "#10b981",
     colors: ["#10b981", "#059669", "#34d399"],
     captions: {
       fr: ["Tableau de bord Pulse en temps réel", "Graphiques analytiques en direct", "Vue des alertes ops"],
@@ -45,7 +43,6 @@ export const projectsData = {
     },
     tech: ["React", "Firebase", "TypeScript", "Tailwind"],
     link: "https://example.com/flux",
-    color: "#3b82f6",
     colors: ["#3b82f6", "#2563eb", "#60a5fa"],
     captions: {
       fr: ["Interface collaborative Flux", "Édition en temps réel", "Vue équipe distribuée"],
@@ -61,7 +58,6 @@ export const projectsData = {
     },
     tech: ["React", "Node.js", "AWS", "Python"],
     link: "https://example.com/nebula",
-    color: "#a855f7",
     colors: ["#a855f7", "#9333ea", "#c084fc"],
     captions: {
       fr: ["Lecteur vidéo Nebula", "Catalogue et recommandations", "Lecture haute définition"],
@@ -77,7 +73,6 @@ export const projectsData = {
     },
     tech: ["Vue", "Nuxt", "Supabase", "JavaScript"],
     link: "https://example.com/orbit",
-    color: "#f59e0b",
     colors: ["#f59e0b", "#d97706", "#fbbf24"],
     captions: {
       fr: ["Tableau de bord Orbit", "Gestion des tâches", "Vue collaboration d'équipe"],
@@ -93,7 +88,6 @@ export const projectsData = {
     },
     tech: ["React Native", "Expo", "Node.js", "MongoDB"],
     link: "https://example.com/zen",
-    color: "#14b8a6",
     colors: ["#14b8a6", "#0d9488", "#5eead4"],
     captions: {
       fr: ["Interface Zen bien-être", "Sessions de méditation guidée", "Suivi du sommeil"],

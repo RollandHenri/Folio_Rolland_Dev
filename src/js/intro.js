@@ -67,6 +67,7 @@ export function initIntro({ onDone } = {}) {
   // quel que soit le chemin (normal, secours, failsafe).
   let revealed = false;
   let failsafeTimer;
+  let interval;
 
   // Notification de fin : une erreur levée dans onDone ne doit jamais
   // bloquer la révélation du site.
@@ -85,6 +86,7 @@ export function initIntro({ onDone } = {}) {
     if (revealed) return;
     revealed = true;
     clearTimeout(failsafeTimer);
+    clearInterval(interval);
     console.warn("Séquence d'intro interrompue, site révélé en secours :", error);
 
     // Révélation « best effort » : même si le DOM est indisponible, on
@@ -174,7 +176,7 @@ export function initIntro({ onDone } = {}) {
     let progress = 0;
 
     // Animation du compteur du loader
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
       progress += Math.floor(Math.random() * 12) + 4;
 
       if (progress >= 100) {
@@ -319,7 +321,7 @@ export function initIntro({ onDone } = {}) {
 
         // Nettoyage de l'écran de chargement et de l'overlay + déverrouillage
         // du scroll X et Y une fois l'animation du héros terminée
-        setTimeout(guarded(completeSequence), 300);
+        setTimeout(guarded(completeSequence), 450);
 
         // Délai avant l'apparition du Hero en fondu et le dézoom du H1
         setTimeout(guarded(() => {

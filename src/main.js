@@ -1,7 +1,5 @@
-import "./style.css";
 import { initIntro } from "./js/intro.js";
 import { initConstellation } from "./js/constellation.js";
-import { initDetails } from "./js/details.js";
 import { initNav } from "./js/nav.js";
 import { initLang } from "./js/lang.js";
 
@@ -38,24 +36,22 @@ document.addEventListener("DOMContentLoaded", () => {
   initLang();
 
   // =========================================================================
-  // PANNEAU DÉTAILS PROJET (openDetails/closeDetails, carousel, tilt, Escape)
-  // =========================================================================
-  initDetails();
-
-  // =========================================================================
   // PROJETS : APPARITION EN FONDU AU SCROLL
   // =========================================================================
   const observerOptions = {
     threshold: 0.1,
-    rootMargin: "0px 0px -50px 0px",
+    rootMargin: "0px 0px -200px 0px",
   };
 
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
+        const cardIndex = Array.from(
+          document.querySelectorAll(".project-card")
+        ).indexOf(entry.target);
         setTimeout(() => {
           entry.target.classList.add("visible");
-        }, index * 350);
+        }, cardIndex * 400);
         observer.unobserve(entry.target);
       }
     });
