@@ -690,6 +690,11 @@ main h1 span {
   pointer-events: auto;
 }
 
+/* Modale ouverte : le fond ne doit plus défiler */
+body.details-open {
+  overflow: hidden;
+}
+
 /* Bouton Retour */
 .project-details__back {
   position: absolute;

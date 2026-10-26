@@ -58,6 +58,12 @@ export function initDetails() {
       .join("");
     updateCarouselButtons();
 
+    // Vraie modale : le contenu principal quitte l'arbre (plus
+    // focusable ni lisible) et le scroll du body est verrouillé
+    // (voir body.details-open dans style.css).
+    if (mainContent) mainContent.hidden = true;
+    document.body.classList.add("details-open");
+
     detailsPanel.setAttribute("aria-hidden", "false");
     detailsPanel.hidden = false;
 
@@ -78,6 +84,7 @@ export function initDetails() {
     detailsPanel.hidden = true;
     detailsPanel.setAttribute("aria-hidden", "true");
     mainContent.hidden = false;
+    document.body.classList.remove("details-open");
 
     const projectsSection = document.getElementById("projects");
     if (projectsSection) {
@@ -134,8 +141,38 @@ export function initDetails() {
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && detailsPanel && !detailsPanel.hidden) {
+    if (!detailsPanel || detailsPanel.hidden) return;
+
+    if (e.key === "Escape") {
       closeDetails();
+      return;
+    }
+
+    if (e.key !== "Tab") return;
+
+    // Piège de focus : tant que le panneau est ouvert (role="dialog"
+    // + aria-modal), Tab / Shift+Tab doit cycler entre le premier et le
+    // dernier élément focusable du panneau, sans jamais ressortir.
+    const focusables = Array.from(
+      detailsPanel.querySelectorAll(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((el) => !el.hidden);
+
+    if (focusables.length === 0) return;
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const active = document.activeElement;
+
+    if (e.shiftKey) {
+      if (active === first || !detailsPanel.contains(active)) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else if (active === last || !detailsPanel.contains(active)) {
+      e.preventDefault();
+      first.focus();
     }
   });
 
