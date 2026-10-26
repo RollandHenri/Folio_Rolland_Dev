@@ -2,6 +2,7 @@ import "./style.css";
 import { initIntro } from "./js/intro.js";
 import { initConstellation } from "./js/constellation.js";
 import { initDetails } from "./js/details.js";
+import { initNav } from "./js/nav.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // Toujours revenir en haut de page à l'actualisation / chargement,
@@ -23,6 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (yearEl) {
     yearEl.textContent = new Date().getFullYear().toString();
   }
+
+  // =========================================================================
+  // NAVIGATION MOBILE (menu burger)
+  // =========================================================================
+  initNav();
 
   // =========================================================================
   // PANNEAU DÉTAILS PROJET (openDetails/closeDetails, carousel, tilt, Escape)

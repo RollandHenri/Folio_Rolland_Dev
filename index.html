@@ -34,7 +34,7 @@
     <header id="top">
       <nav class="nav" aria-label="Navigation principale">
         <a class="nav__brand" href="#top">Rolland<span>-Dev</span></a>
-        <ul class="nav__list">
+        <ul class="nav__list" id="nav-list">
           <li><a class="nav__link" href="#about">À propos</a></li>
           <li><a class="nav__link" href="#projects">Projets</a></li>
           <li><a class="nav__link" href="#contact">Contact</a></li>
@@ -51,6 +51,17 @@
             EN
           </button>
         </div>
+        <button
+          class="nav__toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="nav-list"
+          aria-label="Menu"
+        >
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
       </nav>
     </header>
 
