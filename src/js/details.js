@@ -165,24 +165,60 @@ export function initDetails() {
     if (id) openDetails(id);
   });
 
+  // Tilt 3D : désactivé sur pointeur grossier (tactile) et si l'utilisateur
+  // préfère réduire les animations. Les MediaQueryList sont "vivantes" :
+  // .matches est relu à chaque événement, sans recréer l'objet.
+  const coarsePointer = window.matchMedia("(pointer: coarse)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
   document.querySelectorAll(".project-card").forEach((card) => {
-    // Rotation 3D de la carte qui suit la curseur au survol
+    // Rotation 3D de la carte qui suit le curseur au survol.
+    // Perf : le rect est mesuré UNE fois par session de survol
+    // (pointerenter) puis réutilisé dans mousemove — plus aucun
+    // getBoundingClientRect dans la boucle de déplacement, et les
+    // écritures des variables CSS sont groupées dans un rAF
+    // (une frame au maximum, la dernière position du curseur gagne).
+    let rect = null;
+    let rafId = null;
+    let lastMove = null;
+
+    const tiltDisabled = () =>
+      coarsePointer.matches || reducedMotion.matches;
+
+    card.addEventListener("pointerenter", () => {
+      if (tiltDisabled()) return;
+      rect = card.getBoundingClientRect();
+    });
+
     card.addEventListener("mousemove", (e) => {
-      const rect = card.getBoundingClientRect();
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      if (tiltDisabled() || !rect) return;
+      lastMove = { x: e.clientX, y: e.clientY };
+      if (rafId !== null) return; // une frame déjà programmée : on saute
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        if (!rect || !lastMove) return;
 
-      const maxRotate = 10; // degrés max d'inclinaison
-      const rotateY = ((x - centerX) / centerX) * maxRotate;
-      const rotateX = -((y - centerY) / centerY) * maxRotate;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const x = lastMove.x - rect.left;
+        const y = lastMove.y - rect.top;
 
-      card.style.setProperty("--rotate-x", `${rotateX}deg`);
-      card.style.setProperty("--rotate-y", `${rotateY}deg`);
+        const maxRotate = 10; // degrés max d'inclinaison
+        const rotateY = ((x - centerX) / centerX) * maxRotate;
+        const rotateX = -((y - centerY) / centerY) * maxRotate;
+
+        card.style.setProperty("--rotate-x", `${rotateX}deg`);
+        card.style.setProperty("--rotate-y", `${rotateY}deg`);
+      });
     });
 
     card.addEventListener("mouseleave", () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+      rect = null;
+      lastMove = null;
       card.style.setProperty("--rotate-x", "0deg");
       card.style.setProperty("--rotate-y", "0deg");
     });

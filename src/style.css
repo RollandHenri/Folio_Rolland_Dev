@@ -264,10 +264,8 @@ body.is-loaded header#top {
   transform: translateY(0);
 }
 
-.hero__name {
-  will-change: transform, opacity;
-}
-
+/* (will-change retiré : l'animation drop-dezoom est un one-shot court,
+   une couche compositing permanente n'apporte rien ici) */
 .hero__name.is-hidden-initial {
   opacity: 0;
 }
@@ -562,7 +560,6 @@ main h1 span {
   transform-style: preserve-3d;
   position: relative;
   z-index: 10;
-  will-change: transform;
   transition:
     opacity 0.8s ease,
     transform 0.18s ease-out;
@@ -611,9 +608,25 @@ main h1 span {
 }
 
 .project-card:hover {
+  /* Couche compositing créée uniquement pendant le survol (et non en
+     permanence sur toutes les cartes) */
+  will-change: transform;
   transform: perspective(1000px) rotateX(var(--rotate-x, 0deg))
     rotateY(var(--rotate-y, 0deg)) scale(1.05) translateY(-8px);
   box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
+}
+
+/* Réduction de mouvement : on neutralise le lift/scale 3D du survol
+   (transform + ombre portée) et l'ombre déportée du ::before. Les effets
+   en opacity seule (bordure orange du ::after) restent acceptables. */
+@media (prefers-reduced-motion: reduce) {
+  .project-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .project-card::before {
+    display: none;
+  }
 }
 
 .project-card__img {

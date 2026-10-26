@@ -171,7 +171,18 @@ export function initConstellation() {
       mouse.y = -9999;
     });
 
-    window.addEventListener("resize", resize);
+    // Resize throttlé via rAF : si une frame est déjà programmée, on saute
+    // (l'événement resize peut tirer en rafale pendant un glissement de
+    // fenêtre). resize() lui-même est inchangé : canvas + ré-init étoiles.
+    let resizeRafId = null;
+
+    window.addEventListener("resize", () => {
+      if (resizeRafId !== null) return;
+      resizeRafId = requestAnimationFrame(() => {
+        resizeRafId = null;
+        resize();
+      });
+    });
     resize();
     draw();
   } catch (e) {
