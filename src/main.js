@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================================================================
   const observerOptions = {
     threshold: 0.1,
-    rootMargin: "0px 0px -200px 0px",
+    rootMargin: "0px 0px 0px 0px",
   };
 
   const observer = new IntersectionObserver((entries) => {
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ).indexOf(entry.target);
         setTimeout(() => {
           entry.target.classList.add("visible");
-        }, cardIndex * 400);
+        }, cardIndex * 150);
         observer.unobserve(entry.target);
       }
     });
