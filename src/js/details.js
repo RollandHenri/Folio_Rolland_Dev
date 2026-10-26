@@ -21,6 +21,7 @@ export function initDetails() {
 
   let currentProjectId = null;
   let carouselIndex = 0;
+  let lastFocused = null;
 
   function updateCarouselButtons() {
     if (!carouselTrack || !currentProjectId) return;
@@ -60,6 +61,7 @@ export function initDetails() {
     detailsPanel.setAttribute("aria-hidden", "false");
     detailsPanel.hidden = false;
 
+    lastFocused = document.activeElement;
     detailsBack.focus();
 
     const announce = document.createElement("div");
@@ -83,19 +85,24 @@ export function initDetails() {
       projectsSection.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth", block: "start" });
     }
 
-    const lastCard = document.querySelector(`[data-project="${currentProjectId}"]`);
-    if (lastCard) lastCard.focus();
+    lastFocused?.focus({ preventScroll: true });
 
     currentProjectId = null;
   }
 
-  document.querySelectorAll(".project-card").forEach((card) => {
-    card.addEventListener("click", (e) => {
-      e.preventDefault();
-      const id = card.getAttribute("data-project");
-      openDetails(id);
-    });
+  // Ouverture du panneau : le déclencheur est le lien "Voir le cas"
+  // (focusable au clavier) ; l'article ne porte plus que le tilt 3D.
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest?.(".project-card__link");
+    if (!link) return;
+    e.preventDefault();
+    const id =
+      link.getAttribute("data-project") ||
+      link.closest(".project-card")?.getAttribute("data-project");
+    if (id) openDetails(id);
+  });
 
+  document.querySelectorAll(".project-card").forEach((card) => {
     // Rotation 3D de la carte qui suit la curseur au survol
     card.addEventListener("mousemove", (e) => {
       const rect = card.getBoundingClientRect();
