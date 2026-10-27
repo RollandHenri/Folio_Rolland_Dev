@@ -227,7 +227,7 @@ export function initIntro({ onDone } = {}) {
       }
 
       // Récupération des images depuis la section Projets
-      const projectImgs = document.querySelectorAll(".project-card__img");
+      const projectImgs = document.querySelectorAll(".card__img");
       const imgElements = [];
 
       // Chaque image du projet est clonée une seule fois dans l'overlay
